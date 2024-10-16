@@ -1,27 +1,23 @@
 #![allow(unused)]
 
 use axum::{response::{Html, IntoResponse}, routing::{get, get_service}, Json, Router};
-use tower_http::services::ServeDir;
+use tower_http::services::{ServeDir, ServeFile};
 
 mod error;
 mod web;
+mod models;
+mod services;
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route("/", get(index))
+        .route_service("/", ServeFile::new("templates/index.html"))
         .merge(web::routes_identify::routes())
         .fallback_service(routes_static());
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:8080").await.unwrap();
     println!("->> LISTENING on {:?}\n", listener.local_addr());
     axum::serve(listener, app).await.unwrap();
-}
-
-async fn index() -> impl IntoResponse {
-    println!("->> {:<12} - handler_index", "HANDLER");
-
-    Html("hello <strong>world!</strong>")
 }
 
 

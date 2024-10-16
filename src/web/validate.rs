@@ -23,14 +23,14 @@ pub async fn validate(
 
     if payload.notes.is_empty() {
         return Err(Error::InvalidPayload(
-            "Payload may not be empty".to_string()
+            "Payload is empty".to_string()
         ))
     }
 
     for note in &payload.notes {
         if note.is_empty() {
             return Err(Error::InvalidPayload(
-                "Payload may not contain empty strings".to_string()
+                "Payload contains empty strings".to_string()
             ));
         }
     }

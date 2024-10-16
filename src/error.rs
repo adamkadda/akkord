@@ -14,8 +14,8 @@ impl IntoResponse for Error {
         println!("->> {:<12} - {self:?}", "INTO_RES");
 
         let (status, message) = match self {
-            Error::InvalidHeader(msg) => (StatusCode::BAD_REQUEST, msg),
-            Error::InvalidPayload(msg) => (StatusCode::BAD_REQUEST, msg),
+            Error::InvalidHeader(msg) => (StatusCode::NO_CONTENT, msg),
+            Error::InvalidPayload(msg) => (StatusCode::NO_CONTENT, msg),
         };
 
         (status, Html(format!("Error: {}", message))).into_response()
