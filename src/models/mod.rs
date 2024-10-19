@@ -1,2 +1,2 @@
-mod note;
-mod chord;
+pub mod chord;
+pub mod interval;

@@ -4,8 +4,12 @@ pub type Result<T> = core::result::Result<T, Error>;
 
 #[derive(Debug)]
 pub enum Error {
-    InvalidHeader(String),
-    InvalidPayload(String),
+    InvalidHeader,
+    InvalidPayload,
+
+    // Processing errors
+    InvalidNotes,
+    InvalidInversion,
 }
 
 
@@ -13,12 +17,7 @@ impl IntoResponse for Error {
     fn into_response(self) -> axum::response::Response {
         println!("->> {:<12} - {self:?}", "INTO_RES");
 
-        let (status, message) = match self {
-            Error::InvalidHeader(msg) => (StatusCode::NO_CONTENT, msg),
-            Error::InvalidPayload(msg) => (StatusCode::NO_CONTENT, msg),
-        };
-
-        (status, Html(format!("Error: {}", message))).into_response()
+        StatusCode::NO_CONTENT.into_response()
     }
 }
 

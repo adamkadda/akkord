@@ -3,7 +3,7 @@ use axum::{http::HeaderMap, Json};
 use crate::error::{Error, Result};
 use super::routes_identify::Payload;
 
-pub async fn validate(
+pub fn validate_payload(
     headers: HeaderMap,
     Json(payload): Json<Payload>,
 ) -> Result<Payload> {
@@ -11,29 +11,31 @@ pub async fn validate(
     if let Some(content_type) = headers.get("Content-Type") {
         match content_type.to_str() {
             Ok(value) if value == "application/json" => (),
-            _ => return Err(Error::InvalidHeader(
-                "Content-Type must be application/json".to_string()
-            )),
+            _ => return Err(Error::InvalidHeader),
         }
     } else {
-        return Err(Error::InvalidHeader(
-            "Missing Content-Type header".to_string()
-        ))
+        return Err(Error::InvalidHeader)
     }
 
     if payload.notes.is_empty() {
-        return Err(Error::InvalidPayload(
-            "Payload is empty".to_string()
-        ))
+        return Err(Error::InvalidPayload)
     }
 
     for note in &payload.notes {
         if note.is_empty() {
-            return Err(Error::InvalidPayload(
-                "Payload contains empty strings".to_string()
-            ));
+            return Err(Error::InvalidPayload)
         }
     }
     
     Ok(payload)
+}
+
+pub fn notes_to_i8(payload: Payload) -> Result<Vec<i8>> {
+    let mut i8_notes= Vec::new();
+
+    for str_note in payload.notes {
+        i8_notes.push(str_note.parse().unwrap());
+    }
+    
+    Ok(i8_notes)
 }
