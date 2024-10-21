@@ -10,6 +10,7 @@ pub enum Error {
     // Processing errors
     InvalidNotes,
     InvalidInversion,
+    InvalidRoot,
 }
 
 

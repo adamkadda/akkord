@@ -1,6 +1,6 @@
 use crate::error::{Error, Result};
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Interval {
     Unison, // 0
 
@@ -31,8 +31,7 @@ pub enum Interval {
 
     Min9, // 13
     Maj9, // 14
-    
-    // Min10 : 15
+    Aug9, // 15
 
     Dim11, // 16
     Perf11, // 17
@@ -44,14 +43,50 @@ pub enum Interval {
     Maj13, // 21
 }
 
+impl Interval {
+    pub fn to_string(&self) -> String {
+        let interval_str = match self {
+            Interval::Unison => "P1",
+            Interval::Min2 => "b2",
+            Interval::Maj2 => "2",
+            Interval::Min3 => "b3",
+            Interval::Maj3 => "3",
+            Interval::Perf4 => "4",
+
+            Interval::Aug4 => "#4",
+            Interval::Dim5 => "b5",
+            
+            Interval::Perf5 => "5",
+            Interval::Min6 => "b6",
+            Interval::Aug5 => "#5",
+            Interval::Maj6 => "6",
+            Interval::Dim7 => "bb7",
+            Interval::Min7 => "b7",
+            Interval::Maj7 => "7",
+            Interval::Min9 => "b9",
+            Interval::Maj9 => "9",
+            Interval::Aug9 => "#9",
+            Interval::Dim11 => "b11",
+            Interval::Perf11 => "11",
+            Interval::Aug11 => "#11",
+            Interval::Min13 => "b13",
+            Interval::Maj13 => "13",
+        };
+
+        interval_str.to_string()
+    }
+}
+
 fn usize_to_interval(i: usize) -> Result<Interval> {
     let interval = match i {
         0 => Interval::Unison,
+
         1 => Interval::Min2,
         2 => Interval::Maj2,
         3 => Interval::Min3,
         4 => Interval::Maj3,
         5 => Interval::Perf4,
+
         6 => Interval::Aug4, // or Dim5
         7 => Interval::Perf5,
         8 => Interval::Min6, // or Aug5
@@ -61,8 +96,9 @@ fn usize_to_interval(i: usize) -> Result<Interval> {
         // 12
         13 => Interval::Min9,
         14 => Interval::Maj9,
-        // 15
-        // 16
+        15 => Interval::Aug9,
+
+        16 => Interval::Dim11,
         17 => Interval::Perf11,
         18 => Interval::Aug11, // or Dim12
         // 19
