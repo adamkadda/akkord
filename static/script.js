@@ -1,3 +1,17 @@
+document.querySelector("nav").addEventListener("click", function() {
+    const links = document.querySelector(".links");
+    if (links.style.display === "none" || links.style.display === "") {
+        links.style.display = "block";
+    } else {
+        links.style.display = "none";
+    }
+});
+
+document.getElementById("nav-icon").addEventListener("click", function() {
+    this.classList.toggle('open');
+    // document.getElementById("header").classList.toggle('bigheader');
+});
+
 window.addEventListener('DOMContentLoaded', () => {
     const audioContainer = document.createElement('div');
     
@@ -11,30 +25,6 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Append the generated audio elements to the body
     document.body.appendChild(audioContainer);
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const lowerOctaveArrow = document.getElementById("lower-octave-arrow");
-    const lowerOctaveDiv = document.getElementById("lower-octave");
-
-    lowerOctaveArrow.addEventListener("click", function() {
-        // Toggle the "hidden" class on the "lower-octave" div
-        lowerOctaveDiv.classList.toggle("hidden");
-        lowerOctaveArrow.classList.toggle("left");
-        lowerOctaveArrow.classList.toggle("right")
-    });
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const higherOctaveArrow = document.getElementById("higher-octave-arrow");
-    const higherOctaveDiv = document.getElementById("higher-octave");
-
-    higherOctaveArrow.addEventListener("click", function() {
-        // Toggle the "hidden" class on the "lower-octave" div
-        higherOctaveDiv.classList.toggle("hidden");
-        higherOctaveArrow.classList.toggle("left");
-        higherOctaveArrow.classList.toggle("right")
-    });
 });
 
 let selected = [];

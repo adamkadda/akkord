@@ -8,16 +8,29 @@
         <link rel="stylesheet" href="/static/styles.css">
         <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script>
         <script src="/static/script.js" defer></script>
-        <title>akkord</title>
+        <title>akkord: Piano Chord Identifier</title>
     </head>
     <body>
-        <header class="mb-xl">
-            <h1>akkord.identifier</h1>
+        <header class="smallheader">
+            <h1>akkord</h1>
             <h2>press keys to select notes</h2>
+            <div class="links" style="display: none;">
+                <span class="link about">
+                    <a href="about.html">about</a>
+                </span>
+                <span class="link source">
+                    <a href="https://github.com/adamkadda/akkord" target="_blank">source</a>
+                </span>
+            </div>
+            <nav id="nav-icon" class="">
+                <span></span>
+                <span></span>
+                <span></span>
+            </nav>
         </header>
-        <div class="piano-container mb-l">
-            <div class="arrow left" id="lower-octave-arrow"></div>
-            <div class="piano mt-s mb-s"
+        <div id="wrapper" class="bgcolor">
+            <div class="piano-container">
+                <div class="piano mt-s mb-s"
                 hx-get="/identify"     
                 hx-trigger="click delay:1s"
                 hx-target="#results"
@@ -26,7 +39,7 @@
                 hx-vals='js:{
                     "notes": JSON.stringify(selected)
                 }'>
-                <div class="octave hidden" id="lower-octave">
+                <div class="octave" id="lower-octave">
                     <div data-semitone="-12" class="key white"></div>
                     <div data-semitone="-11" class="key black"></div>
                     <div data-semitone="-10" class="key white"></div>
@@ -40,7 +53,6 @@
                     <div data-semitone="-2" class="key black"></div>
                     <div data-semitone="-1" class="key white"></div>
                 </div>
-
                 <div class="octave" id="middle-octave">
                     <div data-semitone="0" class="key white"></div>
                     <div data-semitone="1" class="key black"></div>
@@ -55,34 +67,16 @@
                     <div data-semitone="10" class="key black"></div>
                     <div data-semitone="11" class="key white"></div>
                 </div>
-
-                <div class="octave hidden" id="higher-octave">
-                    <div data-semitone="12" class="key white"></div>
-                    <div data-semitone="13" class="key black"></div>
-                    <div data-semitone="14" class="key white"></div>
-                    <div data-semitone="15" class="key black"></div>
-                    <div data-semitone="16" class="key white"></div>
-                    <div data-semitone="17" class="key white"></div>
-                    <div data-semitone="18" class="key black"></div>
-                    <div data-semitone="19" class="key white"></div>
-                    <div data-semitone="20" class="key black"></div>
-                    <div data-semitone="21" class="key white"></div>
-                    <div data-semitone="22" class="key black"></div>
-                    <div data-semitone="23" class="key white"></div>
-                </div>
             </div>
-            <div class="arrow right" id="higher-octave-arrow"></div>
+            </div>
+            <div class="results-container hidden">
+                <div class="chord"></div>
+                <div class="chord"></div>
+                <div class="chord"></div>
+                <div class="chord"></div>
+                <div class="chord"></div>
+                <div class="chord"></div>
+            </div>
         </div>
-        <div class="flex">
-            <div class="mb-l" id="results"></div>
-        </div>
-        <h3>
-            Akkord Identifier / Piano Chord Identifier
-            <br>
-            (2024) A Project by:
-            <br>
-            <a class="lastlink" href="https://github.com/adamkadda">https://github.com/adamkadda</a> 
-            <a class="lastlink" href="https://www.linkedin.com/in/adam-kadda-3120aa244/">LinkedIn</a>
-        </h3>
     </body>
 </html>

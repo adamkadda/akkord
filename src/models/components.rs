@@ -217,6 +217,10 @@ impl ChordComponents {
                     There seem to only be three true chords that have M7 as
                     their highest interval. Namely: Xdim maj7, XmMaj7, Xmaj7.
 
+                    Interestingly the 'maj' or 'm' in the 7th chords do not
+                    reliably inform us of the quality of their thirds and
+                    fifths, only their sevenths (in most cases).
+
                     I have a feeling there is something missing here.
                     */
 
