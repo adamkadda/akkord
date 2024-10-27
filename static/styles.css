@@ -2,11 +2,11 @@
    Global Styles
 =================== */
 
-.mb-xs { margin-bottom: 5.8px; }
-.mb-s { margin-bottom: 11.55px; }
-.mb-m { margin-bottom: 23.1px; }
-.mb-l { margin-bottom: 46.2px; }
-.mb-xl { margin-bottom: 92.4px; }
+.mb-xs { margin-bottom: 5px; }
+.mb-s { margin-bottom: 10px; }
+.mb-m { margin-bottom: 20px; }
+.mb-l { margin-bottom: 40px; }
+.mb-xl { margin-bottom: 100px; }
 
 .mt-s { margin-top: 10px; }
 
@@ -25,14 +25,29 @@ body {
     justify-content: center;
 }
 
+.container {
+    padding-left: 25px;
+    padding-right: 25px;
+    overflow: hidden; /* Ensure container doesn't add extra scrollbars */
+}
+
 :root {
     --dark-color: #101410;
-    --dark-pressed-color: #4D4D4D;
+    --dark-pressed-color: #666666;
 
     --light-color: #FFFFFA;
     --light-pressed-color: #CCC;
 
     --border-color: #333;
+
+    --green: #007500;
+    --citrine: #e6c700;
+    --school-bus-yellow: #FFDD00;
+    --red: #db2f27;
+}
+
+.visual-aid {
+    border: 1px solid var(--border-color);
 }
 
 /* ===================
@@ -224,12 +239,6 @@ a {
    Piano
 =================== */
 
-.piano-container {
-    padding-left: 25px;
-    padding-right: 25px;
-    overflow: hidden; /* Ensure container doesn't add extra scrollbars */
-}
-
 .piano {
     display: flex;
     justify-content: flex-start;
@@ -239,6 +248,8 @@ a {
 
     overflow-x: auto;
     white-space: nowrap;
+
+    cursor: pointer;
 }
 
 .octave { display: flex; }
@@ -274,25 +285,89 @@ a {
 }
 
 /* ===================
+   Controls
+=================== */
+
+#controls {
+    color: #000003;
+    text-decoration: none;
+    -webkit-transition: ease 0.1s;
+    transition: ease 0.1s;
+    text-align: right;
+    font-size: 1em;
+    font-weight: 800;
+    cursor: pointer;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    word-spacing: 5px;
+
+    width: 100%;
+    max-width: 728px;
+}
+
+/* ===================
    Results
 =================== */
 
-.results-container {
-    width: 800px;
+#result {
+    width: 100%;
+    max-width: 728px;
     display: flex;
     flex-wrap: wrap; /* Enable wrapping */
-    justify-content: center; /* Adjust alignment as needed */
+    
+    gap: 5px;
 }
 
-.chord {
-    height: 100px;
+button.chord {
+    box-sizing: border-box;
+    display: flex;
 
-    border: 4px solid var(--border-color);
-    border-radius: 8px;
-    margin: 2px;
+    padding: .375rem .75rem;
 
-    flex: 0 0 300px;
+    align-items: center;
+
+    border: 1px solid transparent;
+    border-radius: 1rem;
+
+    cursor: pointer;
+    white-space: nowrap;
+
+    background-color: #E8E8E8;
+
+    opacity: 1; /* Initial state: invisible */
+    transition: opacity 0.5s ease; /* Duration and easing function */
 }
 
-.great { background-color: #C7F9CC; }
-.good { background-color: #FEEECD; }
+button.chord.htmx-added {
+    opacity: 1; /* Final state: visible */
+}
+
+button.chord:hover {
+    background-color: #DEDEDE;
+}
+
+.play-icon {
+    height: 15px;
+    width: 15px;
+    border-radius: 50%;
+}
+
+.green { background-color: var(--green); }
+.yellow { background-color: var(--citrine); }
+.red { background-color: var(--red); }
+
+.name {
+    display: flex;
+    align-items: center; /* Vertically center the content */
+    height: 100%;
+
+    letter-spacing: .025em;
+
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+
+    margin-left: 5px;
+}

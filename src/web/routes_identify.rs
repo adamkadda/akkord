@@ -1,12 +1,11 @@
-use axum::{http::{header, HeaderMap}, response::Html, routing::get, Json, Router};
+use askama::Template;
+use axum::{http::{header, HeaderMap, StatusCode}, response::{Html, IntoResponse}, routing::{post}, Json, Router};
 use serde::Deserialize;
 
-use crate::error::{Error, Result};
-
-use super::validate::{notes_to_i8, validate_payload};
+use crate::{error::{Error, Result}, services::identify::identify, templates::ResultTemplate, web::validate::{parse_payload, validate_payload}};
 
 pub fn routes() -> Router {
-    Router::new().route("/identify", get(identify_handler))
+    Router::new().route("/identify", post(identify_handler))
 }
 
 #[derive(Debug, Deserialize)]
@@ -17,15 +16,30 @@ pub struct Payload {
 async fn identify_handler(
     headers: HeaderMap, 
     Json(payload): Json<Payload>
-) -> Result<Html<String>> {
-    let validated = validate_payload(headers, Json(payload))?;
+) -> impl IntoResponse {
+    println!("->> {:<12} - identify_handler", "HANDLER");
 
-    // Parse string notes into i8
-    let parsed = notes_to_i8(validated);
+     let validated = match validate_payload(headers, Json(payload)) {
+        Ok(p) => p,
+        Err(e) => return e.into_response(),
+     };
 
-    // TODO: Implement real chord naming functionality
+    let parsed = match parse_payload(validated) {
+        Ok(vec) => vec,
+        Err(e) => return e.into_response(),
+    };
 
-    Ok(Html(format!(
-        "Hello client, I have nothing for you."
-    )))
+    // dbg!(format!("{:?}", &parsed));
+
+    let chords = match identify(parsed) {
+        Ok(c) => c,
+        Err(e) => return e.into_response(),
+    };
+
+    let template = ResultTemplate { chords };
+    let response_string = template.render().unwrap();
+
+    println!("->> {:<12} - result.html", "INTO_RES");
+    println!();
+    (StatusCode::OK, Html(response_string)).into_response()
 }

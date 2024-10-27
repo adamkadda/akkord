@@ -7,6 +7,7 @@ mod error;
 mod web;
 mod models;
 mod services;
+mod templates;
 
 #[tokio::main]
 async fn main() {
@@ -24,4 +25,3 @@ async fn main() {
 fn routes_static() -> Router {
     Router::new().nest_service("/", get_service(ServeDir::new("./")))
 }
-

@@ -1,2 +1,2 @@
-mod identify;
+pub mod identify;
 mod processing;

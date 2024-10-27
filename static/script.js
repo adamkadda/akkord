@@ -9,22 +9,29 @@ document.querySelector("nav").addEventListener("click", function() {
 
 document.getElementById("nav-icon").addEventListener("click", function() {
     this.classList.toggle('open');
-    // document.getElementById("header").classList.toggle('bigheader');
 });
 
-window.addEventListener('DOMContentLoaded', () => {
-    const audioContainer = document.createElement('div');
-    
-    // Create audio elements for semitones from -12 to 23
-    for (let i = -12; i <= 23; i++) {
-        const audio = document.createElement('audio');
-        audio.id = i;
-        audio.src = `../static/audio/${i}.wav`;
-        audioContainer.appendChild(audio);
-    }
+document.getElementById('mute').addEventListener('click', () => {
+    const audioElements = document.querySelectorAll("audio");
 
-    // Append the generated audio elements to the body
-    document.body.appendChild(audioContainer);
+    audioElements.forEach(audio => {
+        audio.muted = !audio.muted;
+    });
+    
+    const muteButton = document.getElementById('mute');
+    muteButton.textContent = audioElements[0].muted ? 'unmute' : 'mute';
+});
+
+
+document.getElementById('reset').addEventListener('click', () => {
+    selected.forEach(note => {
+        const key = document.querySelector(`[data-semitone="${note}"]`);
+        key.classList.remove('pressed');
+    });
+
+    selected.length = 0;
+    
+    document.getElementById('result').innerHTML = '';
 });
 
 let selected = [];
@@ -38,10 +45,14 @@ keys.forEach(key => {
 });
 
 function playNote(key) {
-    const noteAudio = document.getElementById(key.dataset.semitone).cloneNode();
-    noteAudio.currentTime = 0;
-    noteAudio.play();
-    // console.log('played:', key.dataset.semitone);
+    const original = document.getElementById(key.dataset.semitone);
+    const copy = original.cloneNode(); // does not copy dynamic properties (e.g. muted)
+    
+    copy.muted = original.muted; // pass the original's state for its 'muted' property
+    copy.currentTime = 0;
+    copy.play();
+
+    console.log('Playing note:', key.dataset.semitone);
 }
 
 function storeNote(key) {
@@ -50,6 +61,9 @@ function storeNote(key) {
     if (selected.includes(note)) {
         selected = selected.filter(n => n !== note);
         key.classList.remove('pressed');
+        if (selected.length == 0) {
+            document.getElementById('result').innerHTML = '';
+        }
     } else {
         selected.push(note);
         playNote(key);

@@ -1,0 +1,6 @@
+{% for chord in chords %}
+<button class="chord" data-notes="[{{ chord.data() }}]">
+    <div class="play-icon {{ chord.color() }}"></div>
+    <div class="name">{{ chord.name }}</div>
+</button>
+{% endfor %}

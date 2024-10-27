@@ -4,6 +4,7 @@ use crate::error::{Error, Result};
 
 use super::{fifth::Fifth, interval::Interval, seventh::Seventh, third::Third, triad::Triad};
 
+#[derive(Debug)]
 pub struct ChordComponents {
     third: Option<Third>,
     sus: Vec<Interval>,
@@ -11,7 +12,7 @@ pub struct ChordComponents {
     triad: Option<Triad>,
     seventh: Option<Seventh>,
     lead: Option<Interval>,
-    add: Vec<Interval>,
+    pub add: Vec<Interval>,
 }
 
 impl ChordComponents {
@@ -83,7 +84,7 @@ impl ChordComponents {
                             if let Some(thr) = third {
                                 match thr {
                                     Third::Major => triad = Some(Triad::Augmented),
-                                    Third::Minor => return Err(Error::InvalidInversion),
+                                    Third::Minor => return Err(Error::InvalidInversionMin3Aug5),
                                 }
                             }
                             fifth = Some(Fifth::Augmented);
@@ -163,6 +164,7 @@ impl ChordComponents {
     pub fn construct_name(self, root: usize) -> Result<(String, usize)> {
         let mut name = String::new();
         let root = note_to_string(root).unwrap();
+        // dbg!(&self.add);
         name.push_str(&root);
 
         let mut alterations = String::new();
@@ -252,83 +254,6 @@ impl ChordComponents {
                 _ => return Err(Error::InvalidInversion)
             }
 
-            let mut extensions = String::new();
-
-            // C7(b5)
-            if !alterations.is_empty() {
-                extensions.push_str("(");
-                extensions.push_str(&alterations);
-                conciseness -= 3;
-            }
-
-            // C7(sus2,4) | C7(b5 sus2,4)
-            if !self.sus.is_empty() {
-
-                // prepare extensions string(?)
-                // prepare base-string
-                // prepare space-separated susses
-                // concatenate base-string and susses
-                // push onto extensions string
-
-                if extensions.is_empty() {
-                    // init extensions string
-                    extensions.push_str("(");
-                } else {
-                    extensions.push_str(" ");
-                }
-
-                let mut susses = String::from("sus");
-                let mut nums = String::new();
-                let mut first_iteration = true;
-
-                for n in self.sus {
-                    if first_iteration {
-                        nums.push_str(&n.to_string());
-                        first_iteration = false;
-                    } else {
-                        nums.push_str(",");
-                        nums.push_str(&n.to_string());
-                    }
-                    conciseness -= 4;
-                }
-
-                susses.push_str(&nums);
-                extensions.push_str(&susses);
-            }
-
-            // C7(add9,13) | C7(b5 sus2,4 add9,13)
-            if !self.add.is_empty() {
-
-                // same logic with susses
-
-                if extensions.is_empty() {
-                    // init extensions string
-                    extensions.push_str("(");
-                } else {
-                    extensions.push_str(" ");
-                }
-
-                let mut adds = String::from("add");
-                let mut nums = String::new();
-                let mut first_iteration = true;
-
-                for n in self.add {
-                    if first_iteration {
-                        nums.push_str(&n.to_string());
-                        first_iteration = false;
-                    } else {
-                        nums.push_str(",");
-                        nums.push_str(&n.to_string());
-                    }
-                    conciseness -= 4;
-                }
-
-                adds.push_str(&nums);
-                extensions.push_str(&adds);
-            }
-
-            extensions.push_str(")");
-            name.push_str(&extensions);
         } else {
 
             // triads
@@ -339,16 +264,97 @@ impl ChordComponents {
                 Some(Triad::Diminished) => name.push_str("dim"),
                 _ => {
 
+                    if self.fifth.is_none() {
+                        return Err(Error::MissingFifth)
+                    }
+
                     // sus + P5
                     match (self.sus[0], self.fifth) {
-                        (any, Some(Fifth::Perfect)) => {
-                            let s: String = format!("sus{}", self.sus[0].to_string());
-                            name.push_str(&s);
-                        }
-                        (_, _) => return Err(Error::InvalidInversion)
+                        (any, Some(Fifth::Perfect)) => (),
+                        (_, _) => return Err(Error::InvalidTriad)
                     }
                 }
             }
+        }
+
+        let mut extensions = String::new();
+
+        // C7(b5)
+        if !alterations.is_empty() {
+            extensions.push_str("(");
+            extensions.push_str(&alterations);
+            conciseness -= 3;
+        }
+
+        // C7(sus2,4) | C7(b5 sus2,4)
+        if !self.sus.is_empty() {
+
+            // prepare extensions string(?)
+            // prepare base-string
+            // prepare space-separated susses
+            // concatenate base-string and susses
+            // push onto extensions string
+
+            if extensions.is_empty() {
+                // init extensions string
+                extensions.push_str("(");
+            } else {
+                extensions.push_str(" ");
+            }
+
+            let mut susses = String::from("sus");
+            let mut nums = String::new();
+            let mut first_iteration = true;
+
+            for n in self.sus {
+                if first_iteration {
+                    nums.push_str(&n.to_string());
+                    first_iteration = false;
+                } else {
+                    nums.push_str(",");
+                    nums.push_str(&n.to_string());
+                }
+                conciseness -= 4;
+            }
+
+            susses.push_str(&nums);
+            extensions.push_str(&susses);
+        }
+
+        // C7(add9,13) | C7(b5 sus2,4 add9,13)
+        if !self.add.is_empty() {
+
+            // same logic with susses
+
+            if extensions.is_empty() {
+                // init extensions string
+                extensions.push_str("(");
+            } else {
+                extensions.push_str(" ");
+            }
+
+            let mut adds = String::from("add");
+            let mut nums = String::new();
+            let mut first_iteration = true;
+
+            for n in self.add {
+                if first_iteration {
+                    nums.push_str(&n.to_string());
+                    first_iteration = false;
+                } else {
+                    nums.push_str(",");
+                    nums.push_str(&n.to_string());
+                }
+                conciseness -= 4;
+            }
+
+            adds.push_str(&nums);
+            extensions.push_str(&adds);
+        }
+
+        if !extensions.is_empty() {
+            extensions.push_str(")");
+            name.push_str(&extensions);
         }
 
         Ok((name, conciseness))

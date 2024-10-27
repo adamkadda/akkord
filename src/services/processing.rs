@@ -1,6 +1,6 @@
 pub(super) fn check(notes: &Vec<i8>) -> bool {
     for note in notes {
-        if *note < 0 || *note > 23 { return false }
+        if *note < -12 || *note > 11 { return false }
     }
     
     true
@@ -18,8 +18,8 @@ pub(super) fn normalize(notes: Vec<i8>) -> Vec<usize> {
     // standardize notes from different octaves into a single octave
     let mut norm: Vec<usize> = notes.into_iter()
         .map(|note|{
-            if note > 11 {
-                (note - 12) as usize
+            if note < 0 {
+                (note + 12) as usize
             } else {
                 note as usize
             }

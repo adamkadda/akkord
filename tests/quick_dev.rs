@@ -9,7 +9,7 @@ async fn quick_dev() -> Result<()> {
 
     // Prepare the JSON payload
     let payload = json!({
-        "notes": ["C", "Eb", "Gb"] // Example JSON list of strings
+        "notes": ["6", "9", "0", "3"] // Example JSON list of strings
     });
 
     // Create headers, including Content-Type
@@ -18,7 +18,7 @@ async fn quick_dev() -> Result<()> {
 
     // Perform the GET request with headers
     let response = client
-        .get("http://localhost:8080/identify")
+        .post("http://localhost:8080/identify")
         .headers(headers)
         .json(&payload) // This actually sends the JSON payload
         .send()

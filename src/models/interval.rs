@@ -104,13 +104,13 @@ fn usize_to_interval(i: usize) -> Result<Interval> {
         // 19
         20 => Interval::Min13,
         21 => Interval::Maj13,
-        _ => return Err(Error::InvalidInversion),
+        _ => return Err(Error::InvalidInterval),
     };
 
     Ok(interval)
 }
 
-pub fn get_intervals(inversion: Vec<usize>) -> Vec<Interval> {
+pub fn get_intervals(inversion: Vec<usize>) -> Result<Vec<Interval>> {
     let mut int_intervals: Vec<usize> = Vec::new();
 
     for (i, cur) in inversion.iter().enumerate() {
@@ -118,19 +118,50 @@ pub fn get_intervals(inversion: Vec<usize>) -> Vec<Interval> {
             int_intervals.push(0); // technically ignored value
         } else {
             let prev = &inversion[i - 1];
-            
+        
             // if the current note is 'higher' than the previous . . .
             let value: usize = match cur > prev {
                 true =>  int_intervals[i - 1] + (cur - prev),
-                false => int_intervals[i - 1] + (cur - prev) + 12,
+                false => int_intervals[i - 1] + (12 - (prev - cur)),
             };
             int_intervals.push(value);
         }
     }
 
-    int_intervals.into_iter()
-    .filter_map(|i| usize_to_interval(i).ok()) // Extracts Ok values
-    .collect()
+    let mut intervals: Vec<Interval> = Vec::new();
+
+    for i in int_intervals {
+        match usize_to_interval(i) {
+            Ok(interval) => intervals.push(interval),
+            Err(e) => return Err(e),
+        }
+    }
+
+    Ok(intervals)
+
+}
+
+#[cfg(test)]
+mod get_intervals_tests {
+    use super::*;
+
+    #[test]
+    fn test_get_intervals_4_7_11_0() {
+        let inversion: Vec<usize> = Vec::from([4, 7, 11, 0]);
+        let correct: Vec<Interval> = Vec::from([
+            Interval::Unison,
+            Interval::Min3,
+            Interval::Perf5,
+            Interval::Min6,
+        ]);
+        assert_eq!(get_intervals(inversion), Ok(correct));
+    }
+
+    #[test]
+    fn test_get_intervals_0_4_8_7() {
+        let inversion: Vec<usize> = Vec::from([2, 6, 9, 1]);
+        get_intervals(inversion);
+    }
 }
 
 pub fn is_valid_inversion(inversion: &Vec<Interval>) -> bool {
