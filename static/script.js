@@ -55,7 +55,6 @@ function clearKeyboard() {
         const key = document.querySelector(`[data-semitone="${note}"]`);
         key.classList.remove('pressed');
     });
-
     selected.length = 0;
 }
 
@@ -82,8 +81,6 @@ function initAudioPipeline(audioElement) {
         audioContext: audioContext,
         gainNode: gainNode,
     }
-
-    console.log(`Pipeline initialized for ${audioElement.id}`)
 }
 
 function prepareNotes(audioElements) {
@@ -136,7 +133,7 @@ function storeNotesSequentially(noteElements) {
     noteElements.forEach((noteElement, index) => {
         setTimeout(() => {
             storeNote(noteElement);
-        }, (index * 250));
+        }, (index * 100));
     });
 }
 
