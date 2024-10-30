@@ -18,11 +18,12 @@ async fn identify_handler(
     Json(payload): Json<Payload>
 ) -> impl IntoResponse {
     println!("->> {:<12} - identify_handler", "HANDLER");
+    println!("->> {:<12} - {:?}", "PAYLOAD", &payload);
 
-     let validated = match validate_payload(headers, Json(payload)) {
-        Ok(p) => p,
-        Err(e) => return e.into_response(),
-     };
+    let validated = match validate_payload(headers, Json(payload)) {
+    Ok(p) => p,
+    Err(e) => return e.into_response(),
+    };
 
     let parsed = match parse_payload(validated) {
         Ok(vec) => vec,
@@ -39,7 +40,7 @@ async fn identify_handler(
     let template = ResultTemplate { chords };
     let response_string = template.render().unwrap();
 
-    println!("->> {:<12} - result.html", "INTO_RES");
+    println!("->> {:<12} - 200 OK", "INTO_RES");
     println!();
     (StatusCode::OK, Html(response_string)).into_response()
 }

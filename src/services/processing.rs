@@ -1,3 +1,5 @@
+use itertools::Itertools;
+
 pub(super) fn check(notes: &Vec<i8>) -> bool {
     for note in notes {
         if *note < -12 || *note > 11 { return false }
@@ -6,12 +8,11 @@ pub(super) fn check(notes: &Vec<i8>) -> bool {
     true
 }
 
-pub(super) fn clean(notes: Vec<i8>) -> Vec<i8> {
-    let mut tally = std::collections::HashSet::new();
-    
-    notes.into_iter()
-        .filter(|note| tally.insert(*note))
-        .collect()
+pub(super) fn clean(notes: Vec<usize>) -> Vec<usize> {
+    notes
+    .into_iter()
+    .unique()
+    .collect::<Vec<_>>()
 }
 
 pub(super) fn normalize(notes: Vec<i8>) -> Vec<usize> {

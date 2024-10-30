@@ -11,17 +11,19 @@ pub fn identify(notes: Vec<i8>) -> Result<Vec<Chord>> {
 
     if !check(&notes) { return Err(Error::InvalidNotes) }
     
-    let cleaned = clean(notes);
+    let norm = normalize(notes);    
+    let cleaned = clean(norm);
 
-    let norm = normalize(cleaned);    
-    let k = norm.len();
+    // dbg!(format!("{:?}", &cleaned));
 
-    let inversions = norm.into_iter().permutations(k);
+    let k = cleaned.len();
+
+    let inversions = cleaned.into_iter().permutations(k);
 
     let mut chords: Vec<Chord> = Vec::new();
 
     for inversion in inversions {       
-        dbg!(format!("{:?}", inversion));
+        // dbg!(format!("{:?}", inversion));
 
         let notes = inversion.clone();
         let intervals = match get_intervals(inversion) {

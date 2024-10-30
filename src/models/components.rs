@@ -105,12 +105,17 @@ impl ChordComponents {
     
                 // seventh
                 Interval::Min7 => {
-                    seventh = Some(Seventh::Minor);
+                    if let Some(Interval::Maj6) = lead {
+                        add.push(Interval::Maj6);
+                    }
                     lead = Some(Interval::Min7);
+                    seventh = Some(Seventh::Minor);
                 }
                 Interval::Maj7 => {
                     if let Some(Seventh::Minor) = seventh {
                         return Err(Error::InvalidInversion)
+                    } else if let Some(Interval::Maj6) = lead {
+                        add.push(Interval::Maj6);
                     } else {
                         seventh = Some(Seventh::Major);
                         lead = Some(Interval::Maj7);
@@ -268,10 +273,12 @@ impl ChordComponents {
                         return Err(Error::MissingFifth)
                     }
 
-                    // sus + P5
-                    match (self.sus[0], self.fifth) {
-                        (any, Some(Fifth::Perfect)) => (),
-                        (_, _) => return Err(Error::InvalidTriad)
+                    if !self.sus.is_empty() {
+                        // sus + P5
+                        match (self.sus[0], self.fifth) {
+                            (any, Some(Fifth::Perfect)) => (),
+                            (_, _) => return Err(Error::InvalidTriad)
+                        }
                     }
                 }
             }
@@ -366,7 +373,7 @@ pub fn note_to_string(num: usize) -> Result<String> {
         0 => "C".to_string(),
         1 => "C#".to_string(),
         2 => "D".to_string(),
-        3 => "Db".to_string(),
+        3 => "Eb".to_string(),
         4 => "E".to_string(),
         5 => "F".to_string(),
         6 => "F#".to_string(),

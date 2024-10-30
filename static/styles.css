@@ -198,7 +198,7 @@ nav {
 a {
     font-size: 1em;
     color: #000003;
-    position: 0;
+    
     margin: 0;
     text-decoration: none;
 }
@@ -318,6 +318,9 @@ a {
     flex-wrap: wrap; /* Enable wrapping */
     
     gap: 5px;
+
+    max-height: 234px; /* 5 and a half rows */
+    overflow-y: auto;
 }
 
 button.chord {
@@ -335,13 +338,6 @@ button.chord {
     white-space: nowrap;
 
     background-color: #E8E8E8;
-
-    opacity: 1; /* Initial state: invisible */
-    transition: opacity 0.5s ease; /* Duration and easing function */
-}
-
-button.chord.htmx-added {
-    opacity: 1; /* Final state: visible */
 }
 
 button.chord:hover {

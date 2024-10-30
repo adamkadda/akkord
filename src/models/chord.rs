@@ -34,7 +34,7 @@ impl Chord {
     pub fn color(&self) -> String {
         if self.score >= 96 {
             return "green".to_string();
-        } else if self.score > 80 {
+        } else if self.score > 88 {
             return "yellow".to_string();
         } else {
             return "red".to_string();
@@ -53,7 +53,7 @@ impl Chord {
 
         let mut prev: i8 = -13;
         let mut higher: bool = false;
-        let data = self.notes
+        self.notes
             .iter()
             .map(|&note| {
                 let cur = note as i8;
@@ -66,13 +66,9 @@ impl Chord {
                     (_, true) => cur,
                 };
                 prev = cur;
-                format!("\"{}\"", normd)
+                format!("{}", normd)
             })
             .collect::<Vec<String>>()
-            .join(",");
-
-        dbg!(&data);
-
-        data
+            .join(",")
     }
 }
