@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" translate="yes">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="A minimalistic and interactive piano chord identifier.">
+        <meta name="keywords" content="Chord Identifier, Piano, Chords, Music Tool, Music Theory, Education">
+        <meta name="apple-mobile-web-app-title" content="akkord">
+    
+        <!-- Stylesheets -->
+        <link rel="stylesheet" href="/static/styles.css">
+    
+        <!-- Favicon and Icons -->
+        <link rel="icon" type="image/png" href="/static/images/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/svg+xml" href="/static/images/favicon.svg" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/images/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="akkord" />
+        <link rel="manifest" href="/static/site.webmanifest" />
+    
+        <!-- Scripts -->
+        <script src="https://unpkg.com/htmx.org"></script>
+        <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+        <script src="/static/script.js" defer></script>
+    
+        <title>{% block title %}{% endblock %}</title>
+    </head>    
+    <body>
+        <header class="smallheader">
+            <h1 translate="no">akkord</h1>
+            {% block subtitle %}{% endblock %}
+            <div class="links" style="display: none;">
+                {% block firstlink %}{% endblock %}
+                <span class="link source">
+                    <a href="https://github.com/adamkadda/akkord" target="_blank">source</a>
+                </span>
+            </div>
+            <nav id="nav-icon" class="">
+                <span></span>
+                <span></span>
+                <span></span>
+            </nav>
+        </header>
+        <div id="wrapper" class="bgcolor">
+            {% block content %}{% endblock %}
+        </div>
+        {% block audio %}{% endblock %}
+    </body>
+</html>

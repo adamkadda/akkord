@@ -192,8 +192,16 @@ nav {
     word-spacing: 5px;
 }
 
+.identifier { text-decoration: none; }
 .about { text-decoration: none; }
 .source { text-decoration: none; }
+
+.linkedin {
+    color: #0072b1;
+    font-size: 1em;
+    font-weight: 800;
+    cursor: pointer;
+}
 
 a {
     font-size: 1em;
@@ -366,4 +374,12 @@ button.chord:hover {
     line-height: 1.5;
 
     margin-left: 5px;
+}
+
+/* ===================
+   Results
+=================== */
+
+#message {
+    max-width: 800px;
 }

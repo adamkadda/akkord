@@ -1,5 +1,6 @@
 #![allow(unused)]
 
+use askama::Template;
 use axum::{response::{Html, IntoResponse}, routing::{get, get_service}, Json, Router};
 use tower_http::services::{ServeDir, ServeFile};
 
@@ -12,7 +13,8 @@ mod templates;
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .route_service("/", ServeFile::new("templates/index.html"))
+        .route("/", get(render_main))
+        .route("/about", get(render_about))
         .merge(web::routes_identify::routes())
         .fallback_service(routes_static());
 
@@ -21,6 +23,15 @@ async fn main() {
     axum::serve(listener, app).await.unwrap();
 }
 
+async fn render_main() -> impl IntoResponse {
+    let template = templates::IdentifierTemplate;
+    Html(template.render().unwrap())
+}
+
+async fn render_about() -> impl IntoResponse {
+    let template = templates::AboutTemplate;
+    Html(template.render().unwrap())
+}
 
 fn routes_static() -> Router {
     Router::new().nest_service("/", get_service(ServeDir::new("./")))

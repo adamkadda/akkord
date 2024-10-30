@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}Chord Identifier{% endblock %}
+
+{% block subtitle %}
+<h2>press keys to select notes</h2>
+{% endblock %}
+
+{% block firstlink %}
+<span class="link about">
+    <a href="/about">about</a>
+</span>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="piano mt-s mb-s"
+        hx-post="/identify"
+        hx-ext="json-enc"
+        hx-trigger="click delay:1s"
+        hx-target="#result"
+        hx-swap="innerHTML"
+        hx-headers='{"Content-Type": "application/json"}'
+        hx-vals='js:{notes: selected}'>
+        <div class="octave" id="lower-octave">
+            <div data-semitone="-12" class="key white"></div>
+            <div data-semitone="-11" class="key black"></div>
+            <div data-semitone="-10" class="key white"></div>
+            <div data-semitone="-9" class="key black"></div>
+            <div data-semitone="-8" class="key white"></div>
+            <div data-semitone="-7" class="key white"></div>
+            <div data-semitone="-6" class="key black"></div>
+            <div data-semitone="-5" class="key white"></div>
+            <div data-semitone="-4" class="key black"></div>
+            <div data-semitone="-3" class="key white"></div>
+            <div data-semitone="-2" class="key black"></div>
+            <div data-semitone="-1" class="key white"></div>
+        </div>
+        <div class="octave" id="middle-octave">
+            <div data-semitone="0" class="key white"></div>
+            <div data-semitone="1" class="key black"></div>
+            <div data-semitone="2" class="key white"></div>
+            <div data-semitone="3" class="key black"></div>
+            <div data-semitone="4" class="key white"></div>
+            <div data-semitone="5" class="key white"></div>
+            <div data-semitone="6" class="key black"></div>
+            <div data-semitone="7" class="key white"></div>
+            <div data-semitone="8" class="key black"></div>
+            <div data-semitone="9" class="key white"></div>
+            <div data-semitone="10" class="key black"></div>
+            <div data-semitone="11" class="key white"></div>
+        </div>
+    </div>
+</div>
+<div id="controls" class="container mb-m">
+    <span id="mute">mute</span>
+    <span id="reset">reset</span>
+</div>
+<div id="result" class="container"></div>
+{% endblock %}
+
+{% block audio %}
+<div id="audio-container">
+    <audio id="-12" src="../static/audio/-12.wav"></audio>
+    <audio id="-11" src="../static/audio/-11.wav"></audio>
+    <audio id="-10" src="../static/audio/-10.wav"></audio>
+    <audio id="-9" src="../static/audio/-9.wav"></audio>
+    <audio id="-8" src="../static/audio/-8.wav"></audio>
+    <audio id="-7" src="../static/audio/-7.wav"></audio>
+    <audio id="-6" src="../static/audio/-6.wav"></audio>
+    <audio id="-5" src="../static/audio/-5.wav"></audio>
+    <audio id="-4" src="../static/audio/-4.wav"></audio>
+    <audio id="-3" src="../static/audio/-3.wav"></audio>
+    <audio id="-2" src="../static/audio/-2.wav"></audio>
+    <audio id="-1" src="../static/audio/-1.wav"></audio>
+    <audio id="0" src="../static/audio/0.wav"></audio>
+    <audio id="1" src="../static/audio/1.wav"></audio>
+    <audio id="2" src="../static/audio/2.wav"></audio>
+    <audio id="3" src="../static/audio/3.wav"></audio>
+    <audio id="4" src="../static/audio/4.wav"></audio>
+    <audio id="5" src="../static/audio/5.wav"></audio>
+    <audio id="6" src="../static/audio/6.wav"></audio>
+    <audio id="7" src="../static/audio/7.wav"></audio>
+    <audio id="8" src="../static/audio/8.wav"></audio>
+    <audio id="9" src="../static/audio/9.wav"></audio>
+    <audio id="10" src="../static/audio/10.wav"></audio>
+    <audio id="11" src="../static/audio/11.wav"></audio>
+</div>
+{% endblock %}
