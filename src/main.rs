@@ -24,11 +24,13 @@ async fn main() {
 }
 
 async fn render_main() -> impl IntoResponse {
+    println!("->> {:<12} - render_main\n", "HANDLER");
     let template = templates::IdentifierTemplate;
     Html(template.render().unwrap())
 }
 
 async fn render_about() -> impl IntoResponse {
+    println!("->> {:<12} - render_about\n", "HANDLER");
     let template = templates::AboutTemplate;
     Html(template.render().unwrap())
 }
