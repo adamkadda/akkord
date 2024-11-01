@@ -8,10 +8,10 @@ A web app for interactive music theory learning tools. Built the backend with [a
 
 ## features
 
-🎹 **Interactive Piano**: built with the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
-🎵 **Chord Identifier**: with lazy loading active search
-✨ **Intuitive Controls**: crisp and user-friendly *mute* and *reset* controls
-🔊 **Chord Playback**: instant playback with just a button press
+- 🎹 **Interactive Piano**: built with the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API)
+- 🎵 **Chord Identifier**: with lazy loading active search
+- ✨ **Intuitive Controls**: crisp and user-friendly *mute* and *reset* controls
+- 🔊 **Chord Playback**: instant playback with just a button press
 
 ## acknowledgements
 
