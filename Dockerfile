@@ -63,6 +63,8 @@ USER appuser
 
 # Copy the executable from the "build" stage.
 COPY --from=build /bin/server /bin/
+COPY static /app/static
+COPY templates /app/templates
 
 # Expose the port that the application listens on.
 EXPOSE 8080
