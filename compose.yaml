@@ -24,8 +24,6 @@ services:
 
   server:
     image: adamkadda/akkord:latest
-    ports:
-      - "8080:8080"
 
 
 # The commented out section below is an example of how to define a PostgreSQL
