@@ -13,23 +13,34 @@ services:
     command:
       - "--api.insecure=true"
       - "--providers.docker"
+      - "--providers.docker.exposedbydefault=false" # prevents docker contains from being exposed by default
+      - "--entryPoints.websecure.address=:443" # identify an entrypoint for HTTPS
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # define challenge type as TLS
+      - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.cloud" # declare email associated with certificate request
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # where to store certificate data
     ports:
       # The HTTP Port
-      - "80:80"
+      - "443:443"
       # The Web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
-      # Allow Traefik to listen to Docker events
+      - letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock
 
   server:
     image: adamkadda/akkord:latest
     labels:
-      - "traefik.http.routers.akkord.rule=Host(`akkord.name`)"
+      - "traefik.enable=true" # enable Traefik to proxy to this server
+      - "traefik.http.routers.akkord.rule=Host(`akkord.name`)" 
+      - "traefik.http.routers.server.entrypoints=websecure" # requests must come through 443
+      - "traefik.http.routers.server.tls.certresolver=myresolver" # use myresolver
     deploy:
       mode: replicated
       replicas: 3
     restart: always
+
+volumes:
+  letsencrypt:
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
