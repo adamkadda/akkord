@@ -8,12 +8,23 @@
 # database or a cache. For examples, see the Awesome Compose repository:
 # https://github.com/docker/awesome-compose
 services:
-  server:
-    build:
-      context: .
-      target: final
+  reverse-proxy:
+    image: traefik:v3.2
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
     ports:
-      - 8080:8080
+      # The HTTP Port
+      - "80:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+    # To allow Traefik can listen to Docker events
+      -/var/run/docker.sock:/var/run/dock.sock
+  server:
+    image: adamkadda/akkord:latest
+    ports:
+      - "8080:8080"
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
