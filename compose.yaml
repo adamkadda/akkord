@@ -18,10 +18,15 @@ services:
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # define challenge type as TLS
       - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.cloud" # declare email associated with certificate request
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # where to store certificate data
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
     ports:
-      # The HTTP Port
+      # HTTP port
+      - "80:80"
+      # HTTPS port
       - "443:443"
-      # The Web UI (enabled by --api.insecure=true)
+      # Traefik web UI (enabled by --api.insecure=true)
       - "8080:8080"
     volumes:
       - letsencrypt:/letsencrypt
