@@ -30,6 +30,7 @@ USER appuser
 COPY --from=build /bin/server /bin/
 COPY static /static
 COPY templates /templates
+COPY favicon.ico /favicon.ico
 
 EXPOSE 8080
 
