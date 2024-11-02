@@ -32,8 +32,8 @@ services:
     labels:
       - "traefik.enable=true" # enable Traefik to proxy to this server
       - "traefik.http.routers.akkord.rule=Host(`akkord.name`)" 
-      - "traefik.http.routers.server.entrypoints=websecure" # requests must come through 443
-      - "traefik.http.routers.server.tls.certresolver=myresolver" # use myresolver
+      - "traefik.http.routers.akkord.entrypoints=websecure" # requests must come through 443
+      - "traefik.http.routers.akkord.tls.certresolver=myresolver" # use myresolver
     deploy:
       mode: replicated
       replicas: 3
