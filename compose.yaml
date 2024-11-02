@@ -26,6 +26,10 @@ services:
     image: adamkadda/akkord:latest
     labels:
       - "traefik.http.routers.akkord.rule=Host(`akkord.name`)"
+    deploy:
+      mode: replicated
+      replicas: 3
+    restart: always
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to
