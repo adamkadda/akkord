@@ -16,7 +16,7 @@ services:
       - "--providers.docker.exposedbydefault=false" # prevents docker contains from being exposed by default
       - "--entryPoints.websecure.address=:443" # identify an entrypoint for HTTPS
       - "--certificatesresolvers.myresolver.acme.tlschallenge=true" # define challenge type as TLS
-      - "--certificatesresolvers.myresolver.acme.email=elliott@zenful.cloud" # declare email associated with certificate request
+      - "--certificatesresolvers.myresolver.acme.email=aentolle.eu@gmail.com" # declare email associated with certificate request
       - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json" # where to store certificate data
       - "--entrypoints.web.address=:80"
       - "--entrypoints.web.http.redirections.entrypoint.to=websecure"

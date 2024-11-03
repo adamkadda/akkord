@@ -34,6 +34,7 @@ USER appuser
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/${APP_NAME} /usr/local/bin/${APP_NAME}
 COPY ./templates ./templates
 COPY ./static ./static
+COPY ./favicon.ico ./favicon.ico
 
 EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/akkord"]
