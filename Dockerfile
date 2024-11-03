@@ -1,20 +1,24 @@
-# syntax=docker/dockerfile:1
-
 ARG RUST_VERSION=1.78.0
 ARG APP_NAME=akkord
 
-FROM rust:${RUST_VERSION}-alpine AS build
-ARG APP_NAME
+FROM clux/muslrust:stable AS chef
+USER root
+RUN cargo install cargo-chef
 WORKDIR /app
 
-RUN apk add --no-cache clang lld musl-dev git
-
+FROM chef AS planner
 COPY . .
+RUN cargo chef prepare --recipe-path recipe.json
 
-RUN cargo build --locked --release
-RUN cp ./target/release/$APP_NAME /bin/server
+FROM chef AS builder
+ARG APP_NAME
+COPY --from=planner /app/recipe.json recipe.json
+RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path recipe.json
+COPY . .
+RUN cargo build --release --target x86_64-unknown-linux-musl --bin ${APP_NAME}
 
 FROM alpine:3.18 AS final
+ARG APP_NAME
 
 ARG UID=10001
 RUN adduser \
@@ -27,11 +31,9 @@ RUN adduser \
     appuser
 USER appuser
 
-COPY --from=build /bin/server /bin/
-COPY static /static
-COPY templates /templates
-COPY favicon.ico /favicon.ico
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/${APP_NAME} /usr/local/bin/${APP_NAME}
+COPY ./templates ./templates
+COPY ./static ./static
 
 EXPOSE 8080
-
-CMD ["/bin/server"]
+ENTRYPOINT ["/usr/local/bin/${APP_NAME}"]
