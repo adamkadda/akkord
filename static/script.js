@@ -92,11 +92,25 @@ prepareNotes(audioElements);
 function playNote(key) {
     const pipeline = audioPipelines[key.dataset.semitone];
     if (pipeline) {
-        const { audioElement } = pipeline;
+        const { audioElement, audioContext } = pipeline;
         audioElement.currentTime = 0;
         audioElement.play();
     }
 }
+
+function handleUserGesture() {
+    if (audioPipelines) {
+        Object.values(audioPipelines).forEach(pipeline => {
+            if (pipeline.audioContext.state === 'suspended') {
+                pipeline.audioContext.resume();
+            }
+        });
+    }
+    document.removeEventListener('click', handleUserGesture);
+}
+
+document.addEventListener('click', handleUserGesture);
+
 
 function storeNote(key) {
     const note = key.dataset.semitone;
