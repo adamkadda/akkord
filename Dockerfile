@@ -36,4 +36,4 @@ COPY ./templates ./templates
 COPY ./static ./static
 
 EXPOSE 8080
-ENTRYPOINT ["/usr/local/bin/${APP_NAME}"]
+ENTRYPOINT ["/usr/local/bin/akkord"]
