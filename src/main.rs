@@ -37,7 +37,6 @@ async fn render_about() -> impl IntoResponse {
 }
 
 async fn set_cache_control(request: Request<Body>, next: Next) -> Response {
-    println!("->> {:<12} - set_cache_control", "MIDDLEWARE");
     let mut response = next.run(request).await;
     response.headers_mut().insert(
         header::CACHE_CONTROL,
@@ -47,7 +46,6 @@ async fn set_cache_control(request: Request<Body>, next: Next) -> Response {
 }
 
 fn routes_static() -> Router {
-    println!("->> {:<12} - static", "HANDLER");
     Router::new()
         .nest_service(
             "/",
