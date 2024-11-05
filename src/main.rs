@@ -19,7 +19,7 @@ async fn main() {
         .fallback_service(routes_static());
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
-    println!("->> LISTENING on {:?}\n", listener.local_addr());
+    println!("->> LISTENING on {:?}\n", listener.local_addr().unwrap());
     axum::serve(listener, app).await.unwrap();
 }
 
