@@ -39,6 +39,7 @@ services:
       - "traefik.http.routers.akkord.rule=Host(`akkord.name`)" 
       - "traefik.http.routers.akkord.entrypoints=websecure" # requests must come through 443
       - "traefik.http.routers.akkord.tls.certresolver=myresolver" # use myresolver
+      - "traefik.http.middlewares.test-http-cache.plugin.httpCache.maxTtl=216000" # 1 hour cache
     deploy:
       mode: replicated
       replicas: 3
