@@ -62,20 +62,16 @@ impl ChordComponents {
                     }
                 }
                 Interval::Perf5 => {
+                    if let Some(Fifth::Diminished) = fifth {
+                        add.push(Interval::Aug4);   
+                    }
+                
                     fifth = Some(Fifth::Perfect);
-                    match third {
-                        None => (),
-                        Some(thr) => {
-                            match thr {
-                                Third::Minor => {
-                                    if let Some(Triad::Diminished) = triad {
-                                        add.push(Interval::Aug4);
-                                    }
-                                    triad = Some(Triad::Minor);
-                                }
-                                Third::Major => triad = Some(Triad::Major),
-                            }
-                        }
+                
+                    triad = match third {
+                        Some(Third::Minor) => Some(Triad::Minor),
+                        Some(Third::Major) => Some(Triad::Major),
+                        None => None,
                     }
                 }
                 Interval::Aug5 | Interval::Min6 => {

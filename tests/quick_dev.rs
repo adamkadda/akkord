@@ -9,7 +9,7 @@ async fn quick_dev() -> Result<()> {
 
     // Prepare the JSON payload
     let payload = json!({
-        "notes": ["-4", "0", "2", "7",  "-5"] // Example JSON list of strings
+        "notes": ["-9", "-2", "2", "7", "9"] // Example JSON list of strings
     });
 
     // Create headers, including Content-Type
