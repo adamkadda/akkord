@@ -1,7 +1,8 @@
 #![allow(unused)]
 
 use askama::Template;
-use axum::{response::{Html, IntoResponse}, routing::{get, get_service}, Json, Router};
+use axum::{body::Body, http::{header, request, HeaderValue, Request}, middleware::{self, Next}, response::{Html, IntoResponse, Response}, routing::{get, get_service}, Json, Router};
+use tower::{layer, ServiceBuilder};
 use tower_http::services::{ServeDir, ServeFile};
 
 mod error;
@@ -35,6 +36,21 @@ async fn render_about() -> impl IntoResponse {
     Html(template.render().unwrap())
 }
 
+async fn set_cache_control(request: Request<Body>, next: Next) -> Response {
+    let mut response = next.run(request).await;
+    response.headers_mut().insert(
+        header::CACHE_CONTROL,
+        HeaderValue::from_static("public, max-age=3600"),
+    );
+    response
+}
+
 fn routes_static() -> Router {
-    Router::new().nest_service("/", get_service(ServeDir::new("./")))
+    Router::new()
+        .nest_service(
+            "/",
+            ServiceBuilder::new()
+                .layer(middleware::from_fn(set_cache_control))
+                .service(ServeDir::new("./"))
+        )
 }
