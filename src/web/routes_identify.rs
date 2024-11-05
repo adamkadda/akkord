@@ -41,6 +41,5 @@ async fn identify_handler(
     let response_string = template.render().unwrap();
 
     println!("->> {:<12} - 200 OK", "INTO_RES");
-    println!();
     (StatusCode::OK, Html(response_string)).into_response()
 }

@@ -25,18 +25,19 @@ async fn main() {
 }
 
 async fn render_main() -> impl IntoResponse {
-    println!("->> {:<12} - render_main\n", "HANDLER");
+    println!("->> {:<12} - render_main", "HANDLER");
     let template = templates::IdentifierTemplate;
     Html(template.render().unwrap())
 }
 
 async fn render_about() -> impl IntoResponse {
-    println!("->> {:<12} - render_about\n", "HANDLER");
+    println!("->> {:<12} - render_about", "HANDLER");
     let template = templates::AboutTemplate;
     Html(template.render().unwrap())
 }
 
 async fn set_cache_control(request: Request<Body>, next: Next) -> Response {
+    println!("->> {:<12} - set_cache_control", "MIDDLEWARE");
     let mut response = next.run(request).await;
     response.headers_mut().insert(
         header::CACHE_CONTROL,
@@ -46,6 +47,7 @@ async fn set_cache_control(request: Request<Body>, next: Next) -> Response {
 }
 
 fn routes_static() -> Router {
+    println!("->> {:<12} - static", "HANDLER");
     Router::new()
         .nest_service(
             "/",
