@@ -11,7 +11,6 @@ services:
   reverse-proxy:
     image: traefik:v3.2
     command:
-      - "--api.insecure=true"
       - "--providers.docker"
       - "--providers.docker.exposedbydefault=false" # prevents docker contains from being exposed by default
       - "--entryPoints.websecure.address=:443" # identify an entrypoint for HTTPS
